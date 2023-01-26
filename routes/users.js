@@ -40,9 +40,10 @@ router.put("/", async (req, res) => {
   }
 });
 
-router.delete("/:userId", async (req, res) => {
+router.delete("/userlist/:userId", async (req, res) => {
   try {
-    Service.findByIdAndDelete(req.params._id);
+    const deleteUser = await User.findByIdAndDelete(req.params.userId);
+    res.json(deleteUser);
   } catch (error) {
     res.json({ message: error });
   }
@@ -50,15 +51,16 @@ router.delete("/:userId", async (req, res) => {
 router.post("/favorite/:userId", async (req, res) => {
   try {
     console.log(req.params.userId);
-    
+
     const finduser = await User.findById(req.params.userId);
     finduser.favorite.push(req.body);
-    
+
     finduser.save();
-    
+
     res.json("Favorite");
   } catch (error) {
     res.json({ message: error });
   }
 });
+
 module.exports = router;
